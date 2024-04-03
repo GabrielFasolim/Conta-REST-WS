@@ -13,13 +13,14 @@ contas = {
     }
 }
 
-class Conta(Resource):
+class getValorConta(Resource):
     def get(self, conta_id):
         if conta_id not in contas:
             return "Conta não encontrada", 404
         else:
             return contas[conta_id], 200
 
+class Deposito(Resource):
     def post(self, conta_id):
         parser = reqparse.RequestParser()
         parser.add_argument("valor")
@@ -31,7 +32,8 @@ class Conta(Resource):
             contas[conta_id]["saldo"] += float(args["valor"])
             return contas[conta_id], 201
 
-api.add_resource(Conta, '/<string:conta_id>')
+api.add_resource(getValorConta, '/conta/<string:conta_id>')
+api.add_resource(Deposito, '/conta/deposito/<string:conta_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
